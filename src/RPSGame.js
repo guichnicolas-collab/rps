@@ -38,6 +38,26 @@ class RPSGame extends React.Component {
                 }
             )
     }
+    updateRank(points) {
+        fetch("http://localhost:3001/updateRankPoints", {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({
+                accountId: localStorage.getItem("_id"),
+                points: points
+            })
+            }).then(
+                response => {
+                    return response.json()
+            }
+            ).then(
+                data => {
+                    
+                }
+            )
+    }
     computerGamePlay(object) {
         // r > s, s > p, p > r 
         let computerObject = Math.floor(Math.random() * 3)
@@ -45,16 +65,22 @@ class RPSGame extends React.Component {
             this.setState({gameMessage: "It's a tie!"})
         } else if (object == 0 && computerObject == 1) {
             this.setState({gameMessage: "Computer Choice: Paper.  Computer wins!"})
+            this.updateRank(-1)
         } else if (object == 0 && computerObject == 2) {
             this.setState({gameMessage: "Computer Choice: Scissors.  You win!"})
+            this.updateRank(1)
         } else if (object == 1 && computerObject == 0) {
             this.setState({gameMessage: "Computer Choice: Rock.  You win!"})
+            this.updateRank(1)
         } else if (object == 1 && computerObject == 2) {
             this.setState({gameMessage: "Computer Choice: Scissors.  Computer wins!"})
+            this.updateRank(-1)
         } else if (object == 2 && computerObject == 0) {
             this.setState({gameMessage: "Computer Choice: Rock.  Computer wins!"})
+            this.updateRank(-1)
         } else if (object == 2 && computerObject == 1) {
             this.setState({gameMessage: "Computer Choice: Paper.  You win!"})
+            this.updateRank(1)
         }
     }
     render() {

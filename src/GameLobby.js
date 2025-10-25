@@ -1,6 +1,7 @@
 import React from "react"
 import Lobby from "./Lobby"
 import RPSGame from "./RPSGame"
+import Leaderboard from "./Leaderboard"
 
 class GameLobby extends React.Component {
     constructor(props) {
@@ -76,6 +77,7 @@ class GameLobby extends React.Component {
         return (
             <div>
                 {content}
+                <Leaderboard />
             </div>
             
         )
