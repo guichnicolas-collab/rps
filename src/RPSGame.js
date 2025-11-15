@@ -16,9 +16,13 @@ class RPSGame extends React.Component {
             opponentName: "",
             gameMessage: ""
         }
-        this.computerGamePlay = this.computerGamePlay.bind(this)
+        this.gamePlay = this.gamePlay.bind(this)
+        this.updateLobby = this.updateLobby.bind(this)
     }
     componentDidMount() {
+        setInterval(this.updateLobby, 1000)
+    }
+    updateLobby() {
         fetch("http://localhost:3001/getLobby", {
             method: "POST",
             headers: {
@@ -58,29 +62,57 @@ class RPSGame extends React.Component {
                 }
             )
     }
-    computerGamePlay(object) {
-        // r > s, s > p, p > r 
-        let computerObject = Math.floor(Math.random() * 3)
-        if (object == computerObject) {
-            this.setState({gameMessage: "It's a tie!"})
-        } else if (object == 0 && computerObject == 1) {
-            this.setState({gameMessage: "Computer Choice: Paper.  Computer wins!"})
-            this.updateRank(-1)
-        } else if (object == 0 && computerObject == 2) {
-            this.setState({gameMessage: "Computer Choice: Scissors.  You win!"})
-            this.updateRank(1)
-        } else if (object == 1 && computerObject == 0) {
-            this.setState({gameMessage: "Computer Choice: Rock.  You win!"})
-            this.updateRank(1)
-        } else if (object == 1 && computerObject == 2) {
-            this.setState({gameMessage: "Computer Choice: Scissors.  Computer wins!"})
-            this.updateRank(-1)
-        } else if (object == 2 && computerObject == 0) {
-            this.setState({gameMessage: "Computer Choice: Rock.  Computer wins!"})
-            this.updateRank(-1)
-        } else if (object == 2 && computerObject == 1) {
-            this.setState({gameMessage: "Computer Choice: Paper.  You win!"})
-            this.updateRank(1)
+    gamePlay(object) {
+        if (this.state.opponentName == "") {
+            // r > s, s > p, p > r 
+            // r = 0
+            // p = 1
+            // s = 2
+            let computerObject = Math.floor(Math.random() * 3)
+            if (object == computerObject) {
+                this.setState({gameMessage: "It's a tie!"})
+            } else if (object == 0 && computerObject == 1) {
+                this.setState({gameMessage: "Computer Choice: Paper.  Computer wins!"})
+                this.updateRank(-1)
+            } else if (object == 0 && computerObject == 2) {
+                this.setState({gameMessage: "Computer Choice: Scissors.  You win!"})
+                this.updateRank(1)
+            } else if (object == 1 && computerObject == 0) {
+                this.setState({gameMessage: "Computer Choice: Rock.  You win!"})
+                this.updateRank(1)
+            } else if (object == 1 && computerObject == 2) {
+                this.setState({gameMessage: "Computer Choice: Scissors.  Computer wins!"})
+                this.updateRank(-1)
+            } else if (object == 2 && computerObject == 0) {
+                this.setState({gameMessage: "Computer Choice: Rock.  Computer wins!"})
+                this.updateRank(-1)
+            } else if (object == 2 && computerObject == 1) {
+                this.setState({gameMessage: "Computer Choice: Paper.  You win!"})
+                this.updateRank(1)
+            }
+        } else {
+            let objects = ["rock", "paper", "scissors"]
+            fetch("http://localhost:3001/makeMove", {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify({
+                    accountId: localStorage.getItem("_id"),
+                    lobbyId: localStorage.getItem("_lobbyId"),
+                    move: objects[object]
+                })
+                }).then(
+                    response => {
+                        return response.json()
+                }
+                ).then(
+                    data => {
+                        if (data.success) {
+                            
+                        }
+                    }
+                )
         }
     }
     render() {
@@ -89,9 +121,9 @@ class RPSGame extends React.Component {
                 <h1>{this.state.ownerName}'s Lobby</h1>
                 <h1>Opponent: {this.state.opponentName}</h1>
                 <button onClick={this.props.leaveLobby}>Leave Lobby</button>
-                <img src={rock} alt="Rock" width="200" height="200" onClick={() => this.computerGamePlay(0)}/>
-                <img src={paper} alt="Paper" width="200" height="200" onClick={() => this.computerGamePlay(1)}/>
-                <img src={scissors} alt="Scissors" width="200" height="200" onClick={() => this.computerGamePlay(2)}/>
+                <img src={rock} alt="Rock" width="200" height="200" onClick={() => this.gamePlay(0)}/>
+                <img src={paper} alt="Paper" width="200" height="200" onClick={() => this.gamePlay(1)}/>
+                <img src={scissors} alt="Scissors" width="200" height="200" onClick={() => this.gamePlay(2)}/>
                 <h5>{this.state.gameMessage}</h5>
             </div>
         )

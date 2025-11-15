@@ -13,23 +13,24 @@ class GameLobby extends React.Component {
         this.createLobby = this.createLobby.bind(this)
         this.leaveLobby = this.leaveLobby.bind(this)
         this.setLobbyId = this.setLobbyId.bind(this)
+        this.getLobbies = this.getLobbies.bind(this)
         this.checkLobby = this.checkLobby.bind(this)
     }
     componentDidMount() {
         this.setState({lobbyId: localStorage.getItem("_lobbyId")})
+        setInterval(this.checkLobby, 1000)
+        setInterval(this.getLobbies, 1000)
+        
+    }
+    getLobbies() {
         fetch("http://localhost:3001/getLobbies").then(
             response => {
                 return response.json()
             }
             ).then(
             data => {
-                
-                    this.setState({lobbies: data.lobbies})
-                
-                
+                this.setState({lobbies: data.lobbies})
             })
-        setInterval(this.checkLobby, 1000)
-        
     }
     checkLobby() {
         fetch("http://localhost:3001/getLobby", {
