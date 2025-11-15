@@ -13,6 +13,7 @@ class GameLobby extends React.Component {
         this.createLobby = this.createLobby.bind(this)
         this.leaveLobby = this.leaveLobby.bind(this)
         this.setLobbyId = this.setLobbyId.bind(this)
+        this.checkLobby = this.checkLobby.bind(this)
     }
     componentDidMount() {
         this.setState({lobbyId: localStorage.getItem("_lobbyId")})
@@ -27,7 +28,31 @@ class GameLobby extends React.Component {
                 
                 
             })
+        setInterval(this.checkLobby, 1000)
         
+    }
+    checkLobby() {
+        fetch("http://localhost:3001/getLobby", {
+        method: "POST",
+        headers: {
+            'Content-Type': "application/json"
+        },
+        body: JSON.stringify({
+            lobbyId: localStorage.getItem("_lobbyId")
+        })
+        }).then(
+            response => {
+                return response.json()
+        }
+        ).then(
+            data => {
+                console.log(data)
+                if (!data.success){
+                    this.setState({lobbyId: null})
+                    localStorage.removeItem("_lobbyId")
+                }
+            }
+        )
     }
     createLobby() {
         let accountId = localStorage.getItem("_id")
@@ -57,6 +82,29 @@ class GameLobby extends React.Component {
         this.setState({lobbyId: lobbyId})
     }
     leaveLobby() {
+        let accountId = localStorage.getItem("_id")
+        fetch("http://localhost:3001/leaveLobby", {
+        method: "POST",
+        headers: {
+            'Content-Type': "application/json"
+        },
+        body: JSON.stringify({
+            playerId: accountId,
+            lobbyId: localStorage.getItem("_lobbyId")
+        })
+        }).then(
+            response => {
+                return response.json()
+        }
+        ).then(
+            data => {
+                console.log(data)
+                if (data.success) {
+                    this.setState({lobbyId: null})
+                    localStorage.removeItem("_lobbyId")
+                }
+            }
+        )
         this.setState({lobbyId: null})
         localStorage.removeItem("_lobbyId")
     }
@@ -76,6 +124,7 @@ class GameLobby extends React.Component {
         }
         return (
             <div>
+                <button onClick={this.props.logOut}>Log Out</button>
                 {content}
                 <Leaderboard />
             </div>
