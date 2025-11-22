@@ -18,9 +18,10 @@ class RPSGame extends React.Component {
         }
         this.gamePlay = this.gamePlay.bind(this)
         this.updateLobby = this.updateLobby.bind(this)
+        this.myInterval = null
     }
     componentDidMount() {
-        setInterval(this.updateLobby, 1000)
+        this.myInterval = setInterval(this.updateLobby, 1000)
     }
     updateLobby() {
         fetch("http://localhost:3001/getLobby", {
@@ -120,7 +121,7 @@ class RPSGame extends React.Component {
             <div>
                 <h1>{this.state.ownerName}'s Lobby</h1>
                 <h1>Opponent: {this.state.opponentName}</h1>
-                <button onClick={this.props.leaveLobby}>Leave Lobby</button>
+                <button onClick={() => {this.props.leaveLobby(); clearInterval(this.myInterval)}}>Leave Lobby</button>
                 <img src={rock} alt="Rock" width="200" height="200" onClick={() => this.gamePlay(0)}/>
                 <img src={paper} alt="Paper" width="200" height="200" onClick={() => this.gamePlay(1)}/>
                 <img src={scissors} alt="Scissors" width="200" height="200" onClick={() => this.gamePlay(2)}/>
