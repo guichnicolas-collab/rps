@@ -126,8 +126,8 @@ class RPSGame extends React.Component {
                 )
         }
     }
-    checkBothPlayed() {
-        fetch("http://localhost:3001/checkBothPlayed", {
+    async checkBothPlayed() {
+        await fetch("http://localhost:3001/checkBothPlayed", {
             method: "POST",
             headers: {
                 'Content-Type': "application/json"
@@ -140,9 +140,9 @@ class RPSGame extends React.Component {
                     return response.json()
             }
             ).then(
-                data => {
+                async data => {
                     if (data.success) {
-                        fetch("http://localhost:3001/checkMove", {
+                        await fetch("http://localhost:3001/checkMove", {
                             method: "POST",
                             headers: {
                                 'Content-Type': "application/json"
@@ -155,9 +155,9 @@ class RPSGame extends React.Component {
                                     return response.json()
                             }
                             ).then(
-                                data => {
+                                async data => {
                                     this.setState({gameMessage: data.message})
-                                    fetch("http://localhost:3001/receivedResult", {
+                                    await fetch("http://localhost:3001/receivedResult", {
                                     method: "POST",
                                     headers: {
                                         'Content-Type': "application/json"
