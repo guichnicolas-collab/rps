@@ -32,6 +32,7 @@ class GameLobby extends React.Component {
                 this.setState({lobbies: data.lobbies})
             })
     }
+    // TODO: when you get kicked out, there is another interval error
     checkLobby() {
         fetch("http://localhost:3001/getLobby", {
         method: "POST",

@@ -77,6 +77,7 @@ class App extends React.Component {
   }
   logOut() {
     localStorage.removeItem("_id")
+    localStorage.removeItem("_lobbyId")
     this.setState({session: false})
   }
   render() {

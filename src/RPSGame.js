@@ -18,6 +18,7 @@ class RPSGame extends React.Component {
         }
         this.gamePlay = this.gamePlay.bind(this)
         this.updateLobby = this.updateLobby.bind(this)
+        this.checkBothPlayed = this.checkBothPlayed.bind(this)
         this.myInterval = null
         this.playedInterval = null
     }
@@ -150,9 +151,20 @@ class RPSGame extends React.Component {
                             }
                             ).then(
                                 data => {
-                                    if (data.success) {
-                                        this.setState({gameMessage: data.message})
-                                    }
+                                    this.setState({gameMessage: data.message})
+                                    fetch("http://localhost:3001/receivedResult", {
+                                    method: "POST",
+                                    headers: {
+                                        'Content-Type': "application/json"
+                                    },
+                                    body: JSON.stringify({
+                                        accountId: localStorage.getItem("_id"),
+                                        lobbyId: localStorage.getItem("_lobbyId")
+                                    })
+                                    }).then(
+                                        response => {
+                                            return response.json()
+                                    })
                                 }
                             )
                     }
