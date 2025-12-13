@@ -19,14 +19,19 @@ class RPSGame extends React.Component {
         this.gamePlay = this.gamePlay.bind(this)
         this.updateLobby = this.updateLobby.bind(this)
         this.checkBothPlayed = this.checkBothPlayed.bind(this)
+        this.canPlay = this.canPlay.bind(this)
         this.myInterval = null
         this.playedInterval = null
+        this.canPlayInterval = null
     }
     componentDidMount() {
         clearInterval(this.myInterval)
         this.myInterval = setInterval(this.updateLobby, 1000)
         clearInterval(this.playedInterval)
         this.playedInterval = setInterval(this.checkBothPlayed, 1000)
+        clearInterval(this.canPlayInterval)
+        this.canPlayInterval = setInterval(this.canPlay, 1000)
+
     }
     updateLobby() {
         fetch("http://localhost:3001/getLobby", {
@@ -171,12 +176,31 @@ class RPSGame extends React.Component {
                 }
             )
     }
+    canPlay() {
+        fetch("http://localhost:3001/canMove", {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({
+                accountId: localStorage.getItem("_id"),
+                lobbyId: localStorage.getItem("_lobbyId")
+            })
+            }).then(
+                response => {
+                    return response.json()
+            }).then(
+                data => {
+                    this.setState({gameMessage: data.message})
+                }
+            )
+    }
     render() {
         return (
             <div>
                 <h1>{this.state.ownerName}'s Lobby</h1>
                 <h1>Opponent: {this.state.opponentName}</h1>
-                <button onClick={() => {this.props.leaveLobby(); clearInterval(this.myInterval); clearInterval(this.playedInterval)}}>Leave Lobby</button>
+                <button onClick={() => {this.props.leaveLobby(); clearInterval(this.myInterval); clearInterval(this.playedInterval); clearInterval(this.canPlayInterval)}}>Leave Lobby</button>
                 <img src={rock} alt="Rock" width="200" height="200" onClick={() => this.gamePlay(0)}/>
                 <img src={paper} alt="Paper" width="200" height="200" onClick={() => this.gamePlay(1)}/>
                 <img src={scissors} alt="Scissors" width="200" height="200" onClick={() => this.gamePlay(2)}/>
