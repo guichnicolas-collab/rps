@@ -19,7 +19,8 @@ class Leaderboard extends React.Component {
         })
     }
     componentDidMount() {
-        setInterval(this.updateLeaderboard, 1000)
+        this.updateLeaderboard()
+        setInterval(this.updateLeaderboard, 7000)
     }
 
     render() {

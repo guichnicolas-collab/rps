@@ -18,8 +18,8 @@ class GameLobby extends React.Component {
     }
     componentDidMount() {
         this.setState({lobbyId: localStorage.getItem("_lobbyId")})
-        setInterval(this.checkLobby, 1000)
-        setInterval(this.getLobbies, 1000)
+        setInterval(this.checkLobby, 7000)
+        setInterval(this.getLobbies, 7000)
         
     }
     getLobbies() {
@@ -112,7 +112,7 @@ class GameLobby extends React.Component {
     }
     render() {
         let lobbyDisplay = this.state.lobbies.map((item) => {
-            return <Lobby data={item} setLobbyId={this.setLobbyId} />
+            return <Lobby data={item} key={item._id} setLobbyId={this.setLobbyId} />
         })
         let content = (
             <div>
