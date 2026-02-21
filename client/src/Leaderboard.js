@@ -24,8 +24,8 @@ class Leaderboard extends React.Component {
     }
 
     render() {
-        let display = this.state.users.map((item) => {
-            return <li>{item.name}: {item.rankPoints}</li>
+        let display = this.state.users.map((item, i) => {
+            return <li key={i}>{item.name}: {item.rankPoints}</li>
         })
         return(
             <div>
