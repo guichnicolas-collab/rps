@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -49,17 +48,17 @@ app.post("/signUp", async (req, res) => {
     req.body.password != "" ||
     req.body.email != ""
   ) {
-    let account = await Account.find({ username: req.body.username });
-    if (account.length > 0) {
+    const acc = await Account.find({ username: req.body.username });
+    if (acc.length > 0) {
       res.json({ success: false, message: "Username already taken!" });
     } else {
       const salt = await bcrypt.genSalt(10);
-      let acc = new Account({
+      const newAcc = new Account({
         username: req.body.username,
         password: await bcrypt.hash(req.body.password, salt),
         email: req.body.email,
       });
-      acc.save();
+      newAcc.save();
       res.json({ success: true });
     }
   } else {
@@ -68,7 +67,7 @@ app.post("/signUp", async (req, res) => {
 });
 
 app.post("/logIn", async (req, res) => {
-  let acc = await Account.find({ username: req.body.username });
+  const acc = await Account.find({ username: req.body.username });
   if (
     acc.length > 0 &&
     (await bcrypt.compare(req.body.password, acc[0].password))
@@ -76,11 +75,12 @@ app.post("/logIn", async (req, res) => {
     res.json({ accountData: acc[0], success: true });
   } else {
     res.json({ success: false });
+    console.log("doesnt exist");
   }
 });
 
 app.post("/session", async (req, res) => {
-  let acc = await Account.find({ _id: req.body.accountId });
+  const acc = await Account.find({ _id: req.body.accountId });
   if (acc.length > 0) {
     res.json({ success: true });
   } else {
@@ -89,29 +89,30 @@ app.post("/session", async (req, res) => {
 });
 
 app.post("/createLobby", async (req, res) => {
-  let acc = await Account.find({ _id: req.body.accountId });
-  let lobby = new Lobby({
-    ownerId: acc[0]._id,
-    ownerName: acc[0].username,
+  const acc = await Account.findById(req.body.accountId);
+  const newLobby = new Lobby({
+    ownerId: acc._id,
+    ownerName: acc.username,
   });
-  await lobby.save();
-  acc[0].lobbyId = lobby._id;
-  await acc[0].save();
-  res.json({ success: true, lobbyId: lobby._id });
+  await newLobby.save();
+  acc.lobbyId = newLobby._id;
+  await acc.save();
+  res.json({ success: true, lobbyId: newLobby._id });
 });
 
 app.get("/getLobbies", async (req, res) => {
-  let lobbyList = await Lobby.find();
-  res.json({ lobbies: lobbyList });
+  const lobbies = await Lobby.find();
+  res.json({ lobbies: lobbies });
 });
 
 app.post("/getLobby", async (req, res) => {
-  let lobbyList = await Lobby.find({ _id: req.body.lobbyId });
-  if (lobbyList.length === 0) {
-    res.json({ success: false });
-  } else {
-    res.json({ lobby: lobbyList[0], success: true });
-  }
+  const lobby = await Lobby.findById(req.body.lobbyId);
+  res.json({ lobby: lobby, success: true });
+  // if (lobby.length === 0) {
+  //   res.json({ success: false });
+  // } else {
+  //   res.json({ lobby: lobbyList[0], success: true });
+  // }
 });
 
 app.post("/makeMove", async (req, res) => {

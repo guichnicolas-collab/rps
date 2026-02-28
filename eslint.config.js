@@ -1,75 +1,45 @@
-// eslint.config.js
+// eslint.config.mjs
+import globals from "globals";
+import { defineConfig } from "eslint/config";
 import js from "@eslint/js";
+import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
+import prettierConfig from "eslint-config-prettier";
 
+export default defineConfig([
+  // Base JS rules
+  js.configs.recommended,
 
-export default [
-js.configs.recommended,
+  // React + JSX + Hooks
+  {
+    files: ["**/*.{js,jsx}"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
+      globals: { ...globals.browser, ...globals.node },
+    },
+    plugins: {
+      react: pluginReact,
+      "react-hooks": pluginReactHooks,
+    },
+    rules: {
+      // Your custom JS rules
+      "prefer-const": "error",
+      semi: ["error", "always"],
+      quotes: ["error", "single", { avoidEscape: true }],
+      eqeqeq: ["error", "always"],
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 
+      // React recommended rules
+      ...pluginReact.configs.recommended.rules,
+      ...pluginReactHooks.configs.recommended.rules,
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
 
-{
-files: ["**/*.{js,jsx}"],
-languageOptions: {
-ecmaVersion: "latest",
-sourceType: "module",
-globals: {
-window: "readonly",
-document: "readonly",
-console: "readonly",
-},
-},
-
-
-rules: {
-/* ===== Possible Errors ===== */
-"no-undef": "error",
-"no-unreachable": "error",
-"no-extra-semi": "error",
-"no-constant-condition": "error",
-
-
-/* ===== Best Practices ===== */
-"eqeqeq": ["error", "always"],
-"curly": ["error", "all"],
-"no-eval": "error",
-"no-implied-eval": "error",
-"no-return-await": "error",
-
-
-/* ===== Variables ===== */
-"no-unused-vars": [
-"error",
-{
-args: "after-used",
-vars: "all",
-ignoreRestSiblings: true,
-varsIgnorePattern: "^_",
-argsIgnorePattern: "^_",
-ignoreExports: true,
-},
-],
-
-
-/* ===== Modern JS ===== */
-"prefer-const": "error",
-"no-var": "error",
-"object-shorthand": ["error", "always"],
-
-
-/* ===== Style (strict but readable) ===== */
-"semi": ["error", "always"],
-"quotes": ["error", "single", { "avoidEscape": true }],
-"comma-dangle": ["error", "always-multiline"],
-
-
-/* ===== Debugging ===== */
-"no-debugger": "error",
-"no-alert": "error",
-
-
-/* ===== Complexity control ===== */
-"complexity": ["warn", 15],
-"max-depth": ["warn", 4],
-"max-params": ["warn", 4],
-},
-},
-];
+      // Prettier rules override
+      ...prettierConfig.rules,
+    },
+    settings: { react: { version: "detect" } },
+  },
+]);
