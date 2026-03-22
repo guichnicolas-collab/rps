@@ -44,9 +44,9 @@ app.get("/", (req, res) => {
 
 app.post("/signUp", async (req, res) => {
   if (
-    req.body.username != "" ||
-    req.body.password != "" ||
-    req.body.email != ""
+    req.body.username !== "" ||
+    req.body.password !== "" ||
+    req.body.email !== ""
   ) {
     const acc = await Account.find({ username: req.body.username });
     if (acc.length > 0) {
@@ -75,14 +75,13 @@ app.post("/logIn", async (req, res) => {
     res.json({ accountData: acc[0], success: true });
   } else {
     res.json({ success: false });
-    console.log("doesnt exist");
   }
 });
 
 app.post("/session", async (req, res) => {
-  const acc = await Account.find({ _id: req.body.accountId });
-  if (acc.length > 0) {
-    res.json({ success: true });
+  const account = await Account.findOne({ _id: req.body.accountId });
+  if (account) {
+    res.json({ success: true, account });
   } else {
     res.json({ success: false });
   }
@@ -101,36 +100,28 @@ app.post("/createLobby", async (req, res) => {
 });
 
 app.get("/getLobbies", async (req, res) => {
-  const lobbies = await Lobby.find();
+  const lobbies = await Lobby.find({ opponentId: null });
   res.json({ lobbies: lobbies });
 });
 
 app.post("/getLobby", async (req, res) => {
   const lobby = await Lobby.findById(req.body.lobbyId);
   res.json({ lobby: lobby, success: true });
-  // if (lobby.length === 0) {
-  //   res.json({ success: false });
-  // } else {
-  //   res.json({ lobby: lobbyList[0], success: true });
-  // }
 });
 
 app.post("/makeMove", async (req, res) => {
-  let lobbyList = await Lobby.find({ _id: req.body.lobbyId });
-  if (
-    req.body.accountId === lobbyList[0].ownerId &&
-    lobbyList[0].ownerMove === ""
-  ) {
-    lobbyList[0].ownerMove = req.body.move;
-    lobbyList[0].ownerPlayed = true;
+  const lobby = await Lobby.findById(req.body.lobbyId);
+  if (req.body.accountId === lobby.ownerId && lobby.ownerMove === "") {
+    lobby.ownerMove = req.body.move;
+    lobby.ownerPlayed = true;
   } else if (
-    req.body.accountId === lobbyList[0].opponentId &&
-    lobbyList[0].opponentMove === ""
+    req.body.accountId === lobby.opponentId &&
+    lobby.opponentMove === ""
   ) {
-    lobbyList[0].opponentMove = req.body.move;
-    lobbyList[0].opponentPlayed = true;
+    lobby.opponentMove = req.body.move;
+    lobby.opponentPlayed = true;
   }
-  lobbyList[0].save();
+  lobby.save();
   res.json({ success: true });
 });
 
@@ -168,6 +159,10 @@ app.post("/checkMove", async (req, res) => {
 // read
 app.post("/checkBothPlayed", async (req, res) => {
   const lobby = await Lobby.findById(req.body.lobbyId);
+  if (!lobby) {
+    res.status(404).json({ success: false });
+    return;
+  }
   if (lobby.ownerPlayed && lobby.opponentPlayed) {
     res.json({ success: true });
   } else {
@@ -240,26 +235,26 @@ app.post("/canMove", async (req, res) => {
 });
 
 app.post("/joinLobby", async (req, res) => {
-  let acc = await Account.find({ _id: req.body.accountId });
-  acc[0].lobbyId = req.body.lobbyId;
-  await acc[0].save();
-  let lobbyList = await Lobby.find({ _id: req.body.lobbyId });
-  if (lobbyList[0].ownerId != req.body.accountId) {
-    lobbyList[0].opponentId = acc[0]._id;
-    lobbyList[0].opponentName = acc[0].username;
+  const acc = await Account.findById(req.body.accountId);
+  acc.lobbyId = req.body.lobbyId;
+  await acc.save();
+  const lobby = await Lobby.findById(req.body.lobbyId);
+  if (lobby.ownerId !== req.body.accountId) {
+    lobby.opponentId = acc._id;
+    lobby.opponentName = acc.username;
   }
-  await lobbyList[0].save();
+  await lobby.save();
   res.json({ success: true });
 });
 
 app.post("/leaveLobby", async (req, res) => {
-  let lobbyList = await Lobby.find({ _id: req.body.lobbyId });
-  if (req.body.playerId === lobbyList[0].ownerId) {
+  const lobby = await Lobby.findById(req.body.lobbyId);
+  if (req.body.playerId === lobby.ownerId) {
     await Lobby.deleteOne({ _id: req.body.lobbyId });
-  } else if (req.body.playerId === lobbyList[0].opponentId) {
-    lobbyList[0].opponentId = null;
-    lobbyList[0].opponentName = "";
-    lobbyList[0].save();
+  } else if (req.body.playerId === lobby.opponentId) {
+    lobby.opponentId = null;
+    lobby.opponentName = "";
+    lobby.save();
   }
   res.json({ success: true });
 });
@@ -272,10 +267,10 @@ app.post("/updateRankPoints", async (req, res) => {
 });
 
 app.get("/getLeaderboard", async (req, res) => {
-  let topAccounts = await Account.find().sort({ rankPoints: -1 }).limit(10);
-  let topIds = [];
+  const topAccounts = await Account.find().sort({ rankPoints: -1 }).limit(10);
+  const topIds = [];
   for (let i = 0; i < topAccounts.length; i++) {
-    let newJson = {
+    const newJson = {
       name: topAccounts[i].username,
       rankPoints: topAccounts[i].rankPoints,
     };

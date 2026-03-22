@@ -1,94 +1,16 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useCallback } from "react";
 import SignUpLogIn from "./SignUpLogIn";
 import GameLobby from "./GameLobby";
 import "./App.css";
 
-// class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       session: false,
-//     };
-//     this.signUp = this.signUp.bind(this);
-//     this.logIn = this.logIn.bind(this);
-//     this.logOut = this.logOut.bind(this);
-//   }
-//   componentDidMount() {
-//     let accountId = localStorage.getItem("_id");
-//     fetch("http://localhost:3001/session", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         accountId: accountId,
-//       }),
-//     })
-//       .then((response) => {
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log(data);
-//         if (data.success) {
-//           this.setState({ session: true });
-//         }
-//       });
-//   }
-
-//   signUp(usernameInput, passwordInput, emailInput) {
-//     fetch("http://localhost:3001/signUp", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         username: usernameInput,
-//         password: passwordInput,
-//         email: emailInput,
-//       }),
-//     });
-//   }
-//   logIn(usernameInput, passwordInput) {
-//     fetch("http://localhost:3001/login", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         username: usernameInput,
-//         password: passwordInput,
-//       }),
-//     })
-//       .then((response) => {
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log(data);
-//         if (data.success) {
-//           this.setState({ session: true });
-//           console.log(data.accountData);
-//           localStorage.setItem("_id", data.accountData._id);
-//         }
-//       });
-//   }
-//   logOut() {
-//     localStorage.removeItem("_id");
-//     localStorage.removeItem("_lobbyId");
-//     this.setState({ session: false });
-//   }
-//   render() {
-//     let contentPage = <SignUpLogIn signUp={this.signUp} logIn={this.logIn} />;
-//     if (this.state.session) {
-//       contentPage = <GameLobby logOut={this.logOut} />;
-//     }
-//     return <div>{contentPage}</div>;
-//   }
-// }
+/**
+ * @typedef {{ _id: string, username: string, email: string, rankPoints: number, lobbyId?: string | null }} Account
+ */
 
 function App() {
-  const [session, setSession] = useState(false);
+  const [session, setSession] = useState(/** @type {Account | null} */ (null));
 
-  function signUp(usernameInput, passwordInput, emailInput) {
+  const signUp = useCallback((usernameInput, passwordInput, emailInput) => {
     fetch("http://localhost:3001/signUp", {
       method: "POST",
       headers: {
@@ -100,8 +22,8 @@ function App() {
         email: emailInput,
       }),
     });
-  }
-  function logIn(usernameInput, passwordInput) {
+  }, []);
+  const logIn = useCallback((usernameInput, passwordInput) => {
     fetch("http://localhost:3001/login", {
       method: "POST",
       headers: {
@@ -116,17 +38,17 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        if (data.success) {
-          setSession(true);
+        if (data.success && data.accountData) {
           localStorage.setItem("_id", data.accountData._id);
+          setSession(data.accountData);
         }
       });
-  }
-  function logOut() {
+  }, []);
+  const logOut = useCallback(() => {
     localStorage.removeItem("_id");
     localStorage.removeItem("_lobbyId");
-    setSession(false);
-  }
+    setSession(null);
+  }, []);
 
   useEffect(() => {
     const accountId = localStorage.getItem("_id");
@@ -143,15 +65,14 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         if (data.success) {
-          setSession(true);
+          setSession(data.account);
         }
       });
   }, []);
 
   const contentPage = session ? (
-    <GameLobby logOut={logOut} />
+    <GameLobby logOut={logOut} session={session} />
   ) : (
     <SignUpLogIn signUp={signUp} logIn={logIn} />
   );

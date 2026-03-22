@@ -1,15 +1,5 @@
 import { React, useRef } from "react";
 
-// class SignUpLogIn extends React.Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             usernameInput: "",
-//             passwordInput: "",
-//             emailInput: ""
-//         }
-//     }
-//     render() {
 //         let boxStyle = {
 //             justifyItems: "center",
 //             display: "block"
@@ -36,36 +26,8 @@ import { React, useRef } from "react";
 //             borderRadius: "5px",
 //             cursor: "pointer"
 //         }
-//         return (
-//             <div>
-//                 <h4>Please fill out the form below to create an account.</h4>
-//                 <hr/>
-//                 <form style={formStyle}>
-//                     <input style={inputStyle} type="text" placeholder="Username" value={this.state.usernameInput} onChange={(e) => {this.setState({usernameInput: e.target.value})}} required/>
-//                     <br/>
-//                     <input style={inputStyle} type="password" placeholder="Password" value={this.state.passwordInput} onChange={(e) => {this.setState({passwordInput: e.target.value})}} required/>
-//                     <br/>
-//                     <input style={inputStyle} type="email" placeholder="Email" value={this.state.emailInput} onChange={(e) => {this.setState({emailInput: e.target.value})}} required/>
-//                     <br/>
-//                     <p style={noteStyle}>By signing up, you have read and agreed to our <a href="#">Terms and Privacy</a>.</p>
-//                     <input style={submitStyle} type="submit" value="Sign Up" onClick={() => {this.props.signUp(this.state.usernameInput, this.state.passwordInput, this.state.emailInput)}}/>
-//                 </form>
-//                 <hr/>
-//                 <h4>Already have an account? Log In</h4>
-//                 <hr/>
-//                 <div style={formStyle}>
-//                     <input style={inputStyle} type="text" placeholder="Username" value={this.usernameInput} onChange={(e) => {this.setState({usernameInput: e.target.value})}} required/>
-//                     <br/>
-//                     <input style={inputStyle} type="password" placeholder="Password" value={this.passwordInput} onChange={(e) => {this.setState({passwordInput: e.target.value})}} required/>
-//                     <br/>
-//                     <input style={submitStyle} type="submit" value="Log In" onClick={() => {this.props.logIn(this.state.usernameInput, this.state.passwordInput)}}/>
-//                 </div>
-//             </div>
-//         )
-//     }
-// }
 
-function SignUpLogIn({ signUp, logIn }) {
+function SignUpLogIn(props) {
   const usernameInput = useRef("");
   const passwordInput = useRef("");
   const emailInput = useRef("");
@@ -93,11 +55,18 @@ function SignUpLogIn({ signUp, logIn }) {
         <br />
         <p>
           By signing up, you have read and agreed to our{" "}
-          <a href="#">Terms and Privacy</a>.
+          <a
+            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Terms and Privacy
+          </a>
+          .
         </p>
         <button
           onClick={() => {
-            signUp(
+            props.signUp(
               usernameInput.current.value,
               passwordInput.current.value,
               emailInput.current.value,
@@ -129,7 +98,10 @@ function SignUpLogIn({ signUp, logIn }) {
 
         <button
           onClick={() => {
-            logIn(usernameInput.current.value, passwordInput.current.value);
+            props.logIn(
+              usernameInput.current.value,
+              passwordInput.current.value,
+            );
           }}
         >
           Log In
