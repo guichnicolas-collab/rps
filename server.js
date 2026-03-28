@@ -7,6 +7,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/client/build"));
 
 mongoose.connect(
   "mongodb+srv://guichnicolas:njgy6lBj1LUKAxkx@cluster0.yvhlh.mongodb.net/",
@@ -39,7 +40,7 @@ const LobbySchema = new mongoose.Schema({
 const Lobby = mongoose.model("rpslobbies", LobbySchema);
 
 app.get("/", (req, res) => {
-  res.send("Main");
+  res.sendFile(__dirname + "/client/build/index.html");
 });
 
 app.post("/signUp", async (req, res) => {
