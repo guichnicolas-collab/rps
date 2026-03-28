@@ -16,7 +16,7 @@ function RPSGame(props) {
   const [gameMessage, setGameMessage] = useState("");
 
   const updateLobby = useCallback(async () => {
-    const response = await fetch("http://localhost:3001/getLobby", {
+    const response = await fetch("getLobby", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +33,7 @@ function RPSGame(props) {
   }, [props.lobbyId]);
 
   async function updateRank(points) {
-    const response = await fetch("http://localhost:3001/updateRankPoints", {
+    const response = await fetch("updateRankPoints", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ function RPSGame(props) {
     } else {
       const objects = ["rock", "paper", "scissors"];
 
-      const response = await fetch("http://localhost:3001/makeMove", {
+      const response = await fetch("makeMove", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,7 @@ function RPSGame(props) {
   }
 
   const checkBothPlayed = useCallback(async () => {
-    const res = await fetch("http://localhost:3001/checkBothPlayed", {
+    const res = await fetch("checkBothPlayed", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -110,7 +110,7 @@ function RPSGame(props) {
     if (!data.success) {
       return;
     }
-    const moveRes = await fetch("http://localhost:3001/checkMove", {
+    const moveRes = await fetch("checkMove", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function RPSGame(props) {
     setGameMessage(moveData.message);
     await sleep(1000);
 
-    await fetch("http://localhost:3001/receivedResult", {
+    await fetch("receivedResult", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -138,7 +138,7 @@ function RPSGame(props) {
   }, []);
 
   const canPlay = useCallback(async () => {
-    const response = await fetch("http://localhost:3001/canMove", {
+    const response = await fetch("canMove", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

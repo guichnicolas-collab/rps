@@ -11,7 +11,7 @@ function App() {
   const [session, setSession] = useState(/** @type {Account | null} */ (null));
 
   const signUp = useCallback((usernameInput, passwordInput, emailInput) => {
-    fetch("http://localhost:3001/signUp", {
+    fetch("signUp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ function App() {
     });
   }, []);
   const logIn = useCallback((usernameInput, passwordInput) => {
-    fetch("http://localhost:3001/login", {
+    fetch("login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function App() {
 
   useEffect(() => {
     const accountId = localStorage.getItem("_id");
-    fetch("http://localhost:3001/session", {
+    fetch("session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

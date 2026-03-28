@@ -10,7 +10,7 @@ function GameLobby(props) {
   const [lobbies, setLobbies] = useState([]);
 
   const getLobbies = useCallback(() => {
-    fetch("http://localhost:3001/getLobbies")
+    fetch("getLobbies")
       .then((response) => response.json())
       .then((data) => {
         setLobbies(data.lobbies);
@@ -18,7 +18,7 @@ function GameLobby(props) {
   }, []);
 
   const checkLobby = useCallback(() => {
-    fetch("http://localhost:3001/getLobby", {
+    fetch("getLobby", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function GameLobby(props) {
   const createLobby = useCallback(() => {
     const accountId = localStorage.getItem("_id");
 
-    fetch("http://localhost:3001/createLobby", {
+    fetch("createLobby", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ function GameLobby(props) {
   const leaveLobby = useCallback(() => {
     const accountId = localStorage.getItem("_id");
 
-    fetch("http://localhost:3001/leaveLobby", {
+    fetch("leaveLobby", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

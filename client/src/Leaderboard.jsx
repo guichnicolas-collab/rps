@@ -4,7 +4,7 @@ function Leaderboard() {
   const [users, setUsers] = useState([]);
 
   const updateLeaderboard = useCallback(() => {
-    fetch("http://localhost:3001/getLeaderboard")
+    fetch("getLeaderboard")
       .then((response) => {
         return response.json();
       })
