@@ -3,15 +3,15 @@ const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/client/build"));
 
-mongoose.connect(
-  "mongodb+srv://guichnicolas:njgy6lBj1LUKAxkx@cluster0.yvhlh.mongodb.net/",
-);
+mongoose.connect(process.env.MONGO_URI);
 
 const AccountSchema = new mongoose.Schema({
   username: String,
