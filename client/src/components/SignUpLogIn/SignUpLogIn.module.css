@@ -1,0 +1,27 @@
+.boxStyle {
+  justify-items: center;
+  display: block;
+}
+.formStyle {
+  justify-items: center;
+  display: block;
+}
+.inputStyle {
+  margin: 10px;
+  padding: 7px;
+  width: 190px;
+}
+.checkStyle {
+  margin: 10px;
+  cursor: pointer;
+}
+.noteStyle {
+  font-size: 12px;
+}
+.submitStyle {
+  padding: 10px;
+  background-color: #3bdb9e;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

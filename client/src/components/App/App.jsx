@@ -1,7 +1,7 @@
 import { React, useState, useEffect, useCallback } from "react";
-import SignUpLogIn from "./SignUpLogIn";
-import GameLobby from "./GameLobby";
-import "./App.css";
+import SignUpLogIn from "../SignUpLogIn/SignUpLogIn";
+import GameLobby from "../GameLobby/GameLobby";
+import AppCss from "./App.module.css";
 
 /**
  * @typedef {{ _id: string, username: string, email: string, rankPoints: number, lobbyId?: string | null }} Account

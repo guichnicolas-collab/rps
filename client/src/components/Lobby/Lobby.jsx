@@ -1,3 +1,5 @@
+import LobbyCss from "./Lobby.module.css";
+
 function Lobby(props) {
   function joinLobby() {
     localStorage.setItem("_lobbyId", props.data._id);
@@ -22,9 +24,11 @@ function Lobby(props) {
       });
   }
   return (
-    <div>
+    <div className={LobbyCss.lobbyStyle}>
       <h1>{props.data.ownerName}'s Lobby</h1>
-      <button onClick={joinLobby}>Join Lobby</button>
+      <button className={LobbyCss.buttonStyle} onClick={joinLobby}>
+        Join Lobby
+      </button>
     </div>
   );
 }

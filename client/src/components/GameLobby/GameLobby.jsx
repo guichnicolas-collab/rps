@@ -1,7 +1,8 @@
 import { React, useState, useEffect, useCallback } from "react";
-import Lobby from "./Lobby";
-import RPSGame from "./RPSGame";
-import Leaderboard from "./Leaderboard";
+import Lobby from "../Lobby/Lobby";
+import RPSGame from "../RPSGame/RPSGame";
+import Leaderboard from "../Leaderboard/Leaderboard";
+import GameLobbyCss from "./GameLobby.module.css";
 
 function GameLobby(props) {
   const [lobbyId, setLobbyId] = useState(() =>
@@ -99,9 +100,11 @@ function GameLobby(props) {
   });
 
   let content = (
-    <div>
-      <button onClick={createLobby}>Create Lobby</button>
-      {lobbyDisplay}
+    <div className={GameLobbyCss.childStyle}>
+      <button className={GameLobbyCss.buttonStyle} onClick={createLobby}>
+        Create Lobby
+      </button>
+      <div className={GameLobbyCss.lobbyDisplayStyle}>{lobbyDisplay}</div>
     </div>
   );
 
@@ -116,9 +119,15 @@ function GameLobby(props) {
   return (
     <div>
       Logged in as: {props.session.username}
-      <button onClick={props.logOut}>Log Out</button>
-      {content}
-      <Leaderboard />
+      <button className={GameLobbyCss.buttonStyle} onClick={props.logOut}>
+        Log Out
+      </button>
+      <div className={GameLobbyCss.contentStyle}>
+        {content}
+        <div className={GameLobbyCss.leaderboardStyle}>
+          <Leaderboard />
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,31 @@
+.buttonStyle {
+  padding: 10px;
+  background-color: #3bdb9e;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+.buttonStyle:hover {
+  background-color: #2ca073;
+}
+.imageStyle {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  margin: 10px;
+  transition: transform 0.3s ease-in-out;
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+.imageStyle:hover {
+  transform: scale(1.2);
+  border: 2px solid black;
+}
+.messageStyle {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+}

@@ -1,31 +1,5 @@
 import { React, useRef } from "react";
-
-//         let boxStyle = {
-//             justifyItems: "center",
-//             display: "block"
-//         }
-//         let formStyle = {
-
-//         }
-//         let inputStyle = {
-//             margin: "10px",
-//             padding: "7px",
-//             width: "190px"
-//         }
-//         let checkStyle = {
-//             margin: "10px",
-//             cursor: "pointer"
-//         }
-//         let noteStyle = {
-//             fontSize: "12px"
-//         }
-//         let submitStyle = {
-//             padding: "10px",
-//             backgroundColor: "#3bdb9e",
-//             border: "none",
-//             borderRadius: "5px",
-//             cursor: "pointer"
-//         }
+import SignUpLogInCss from "./SignUpLogIn.module.css";
 
 function SignUpLogIn(props) {
   const usernameInput = useRef("");
@@ -33,11 +7,12 @@ function SignUpLogIn(props) {
   const emailInput = useRef("");
 
   return (
-    <div>
+    <div className={SignUpLogInCss.boxStyle}>
       <h4>Please fill out the form below to create an account.</h4>
       <hr />
-      <div>
+      <div className={SignUpLogInCss.formStyle}>
         <input
+          className={SignUpLogInCss.inputStyle}
           type="text"
           placeholder="Username"
           ref={usernameInput}
@@ -45,15 +20,22 @@ function SignUpLogIn(props) {
         />
         <br />
         <input
+          className={SignUpLogInCss.inputStyle}
           type="password"
           placeholder="Password"
           ref={passwordInput}
           required
         />
         <br />
-        <input type="email" placeholder="Email" ref={emailInput} required />
+        <input
+          className={SignUpLogInCss.inputStyle}
+          type="email"
+          placeholder="Email"
+          ref={emailInput}
+          required
+        />
         <br />
-        <p>
+        <p className={SignUpLogInCss.noteStyle}>
           By signing up, you have read and agreed to our{" "}
           <a
             href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"
@@ -65,6 +47,7 @@ function SignUpLogIn(props) {
           .
         </p>
         <button
+          className={SignUpLogInCss.submitStyle}
           onClick={() => {
             props.signUp(
               usernameInput.current.value,
@@ -79,8 +62,9 @@ function SignUpLogIn(props) {
       <hr />
       <h4>Already have an account? Log In</h4>
       <hr />
-      <div>
+      <div className={SignUpLogInCss.formStyle}>
         <input
+          className={SignUpLogInCss.inputStyle}
           type="text"
           placeholder="Username"
           ref={usernameInput}
@@ -88,6 +72,7 @@ function SignUpLogIn(props) {
         />
         <br />
         <input
+          className={SignUpLogInCss.inputStyle}
           type="password"
           placeholder="Password"
           ref={passwordInput}
@@ -97,6 +82,7 @@ function SignUpLogIn(props) {
         {/* <input type="submit" value="Log In" /> */}
 
         <button
+          className={SignUpLogInCss.submitStyle}
           onClick={() => {
             props.logIn(
               usernameInput.current.value,

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import rock from "./assets/Rock.jpeg";
-import paper from "./assets/Paper.jpeg";
-import scissors from "./assets/Scissors.jpeg";
+import rock from "../../assets/Rock.jpeg";
+import paper from "../../assets/Paper.jpeg";
+import scissors from "../../assets/Scissors.jpeg";
+import RPSGameCss from "./RPSGame.module.css";
 
 // zoom link: https://us05web.zoom.us/j/6992957106?pwd=aWFFTUFuQUxKaEh0eWxCck9lZWtSQT09#success
 
@@ -169,9 +170,12 @@ function RPSGame(props) {
       <h1>{ownerName}&apos;s Lobby</h1>
       <h1>Opponent: {opponentName}</h1>
 
-      <button onClick={props.leaveLobby}>Leave Lobby</button>
+      <button className={RPSGameCss.buttonStyle} onClick={props.leaveLobby}>
+        Leave Lobby
+      </button>
 
       <img
+        className={RPSGameCss.imageStyle}
         src={rock}
         alt="Rock"
         width="200"
@@ -179,6 +183,7 @@ function RPSGame(props) {
         onClick={() => gamePlay(0)}
       />
       <img
+        className={RPSGameCss.imageStyle}
         src={paper}
         alt="Paper"
         width="200"
@@ -186,6 +191,7 @@ function RPSGame(props) {
         onClick={() => gamePlay(1)}
       />
       <img
+        className={RPSGameCss.imageStyle}
         src={scissors}
         alt="Scissors"
         width="200"
@@ -193,7 +199,7 @@ function RPSGame(props) {
         onClick={() => gamePlay(2)}
       />
 
-      <h5>{gameMessage}</h5>
+      <h5 className={RPSGameCss.messageStyle}>{gameMessage}</h5>
     </div>
   );
 }

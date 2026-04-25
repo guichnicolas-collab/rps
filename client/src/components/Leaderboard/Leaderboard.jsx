@@ -1,4 +1,5 @@
 import { React, useEffect, useState, useCallback } from "react";
+import LeaderboardCss from "./Leaderboard.module.css";
 
 function Leaderboard() {
   const [users, setUsers] = useState([]);
@@ -22,14 +23,14 @@ function Leaderboard() {
   }, [updateLeaderboard]);
   const display = users.map((item, i) => {
     return (
-      <li key={i}>
+      <li className={LeaderboardCss.listItemStyle} key={i}>
         {item.name}: {item.rankPoints}
       </li>
     );
   });
   return (
-    <div>
-      <h1>Leaderboard</h1>
+    <div className={LeaderboardCss.contentStyle}>
+      <h1 className={LeaderboardCss.titleStyle}>Leaderboard</h1>
       <ol>{display}</ol>
     </div>
   );
